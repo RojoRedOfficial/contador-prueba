@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContaFiscal | Contador Especializado en Impuestos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a3a5c;
+            --secondary: #2e86ab;
+            --accent: #f0a500;
+            --light: #f5f7fa;
+            --dark: #1a1a2e;
+            --text: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 10rem 2rem 6rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #d4900a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(240,165,0,0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--white);
+            color: var(--white);
+            background: transparent;
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        /* ---- SECTIONS ---- */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .section-title .underline {
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* ---- SERVICIOS ---- */
+        #servicios {
+            background: var(--light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* ---- SOBRE MI ---- */
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .about-img {
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+        }
+
+        .about-img .avatar {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 5rem;
+            color: var(--white);
+        }
+
+        .about-text {
+            flex: 1.5;
+            min-width: 300px;
+        }
+
+        .about-text h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .stat .label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* ---- TESTIMONIOS ---- */
+        #testimonios {
+            background: var(--light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '\201C';
+            font-size: 4rem;
+            color: var(--accent);
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+            opacity: 0.3;
+        }
+
+        .testimonial p {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1rem;
+            padding-top: 1.5rem;
+        }
+
+        .testimonial .author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .testimonial .role {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* ---- CONTACTO ---- */
+        .contact-container {
+            display: flex;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .contact-item .icon {
+            width: 45px;
+            height: 45px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item .details strong {
+            display: block;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .contact-item .details span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .contact-form {
+            flex: 1.2;
+            min-width: 300px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .contact-form textarea {
+            height: 130px;
+            resize: vertical;
+        }
+
+        .contact-form .btn {
+            width: 100%;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            background: var(--dark);
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 1rem 2rem;
+                gap: 1rem;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .about-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="logo">Conta<span>Fiscal</span></div>
+        <button class="menu-toggle" onclick="document.querySelector('nav ul').classList.toggle('active')">&#9776;</button>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#sobre-mi">Sobre M&iacute;</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+        <h1>Tu Contador Especializado<br>en <span>Impuestos</span></h1>
+        <p>Optimizo tu carga fiscal de forma legal y eficiente. M&aacute;s de 15 a&ntilde;os ayudando a personas y empresas a cumplir con sus obligaciones tributarias.</p>
+        <a href="#contacto" class="btn btn-primary">Agenda tu Consulta</a>
+        <a href="#servicios" class="btn btn-outline">Ver Servicios</a>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+        <div class="section-title">
+            <h2>Servicios Profesionales</h2>
+            <p>Soluciones fiscales integrales para que te enfoques en lo que mejor sabes hacer</p>
+            <div class="underline"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">&#128200;</div>
+                <h3>Declaraciones de Impuestos</h3>
+                <p>Declaraciones mensuales y anuales de ISR, IVA y dem&aacute;s obligaciones fiscales para personas f&iacute;sicas y morales.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128176;</div>
+                <h3>Planeaci&oacute;n Fiscal</h3>
+                <p>Estrategias legales para optimizar tu carga tributaria y aprovechar al m&aacute;ximo los beneficios fiscales disponibles.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128221;</div>
+                <h3>Contabilidad General</h3>
+                <p>Registro contable, estados financieros, conciliaciones bancarias y control de cuentas por cobrar y pagar.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9878;&#65039;</div>
+                <h3>Defensa Fiscal</h3>
+                <p>Representaci&oacute;n ante auditor&iacute;as del SAT, atenci&oacute;n de requerimientos y recursos de revocaci&oacute;n.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128188;</div>
+                <h3>Constituci&oacute;n de Empresas</h3>
+                <p>Asesor&iacute;a para elegir el r&eacute;gimen fiscal ideal, alta ante el SAT y tr&aacute;mites de apertura de negocio.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#128179;</div>
+                <h3>N&oacute;mina y Seguridad Social</h3>
+                <p>C&aacute;lculo de n&oacute;mina, retenciones de ISR, cuotas IMSS e INFONAVIT, y timbrado de recibos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE MI -->
+    <section id="sobre-mi">
+        <div class="section-title">
+            <h2>Sobre M&iacute;</h2>
+            <p>Conoce al profesional detr&aacute;s de tu tranquilidad fiscal</p>
+            <div class="underline"></div>
+        </div>
+        <div class="about-container">
+            <div class="about-img">
+                <div class="avatar">&#128104;&#8205;&#128188;</div>
+            </div>
+            <div class="about-text">
+                <h3>C.P. Carlos Mendoza Rios</h3>
+                <p>Contador P&uacute;blico egresado de la UNAM con Maestr&iacute;a en Impuestos. Certificado por el IMCP en la disciplina de Fiscal.</p>
+                <p>A lo largo de mi carrera he asesorado a m&aacute;s de 500 clientes, desde freelancers y peque&ntilde;os negocios hasta empresas medianas, siempre con un enfoque en el cumplimiento puntual y la optimizaci&oacute;n fiscal inteligente.</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="number">15+</div>
+                        <div class="label">A&ntilde;os de experiencia</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">500+</div>
+                        <div class="label">Clientes atendidos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="number">98%</div>
+                        <div class="label">Satisfacci&oacute;n</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section id="testimonios">
+        <div class="section-title">
+            <h2>Lo que dicen mis clientes</h2>
+            <p>La confianza de mis clientes es mi mejor carta de presentaci&oacute;n</p>
+            <div class="underline"></div>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial">
+                <p>Gracias al C.P. Mendoza logr&eacute; regularizar mi situaci&oacute;n fiscal sin multas. Excelente atenci&oacute;n y siempre disponible para resolver dudas.</p>
+                <div class="author">Mar&iacute;a L&oacute;pez</div>
+                <div class="role">Freelancer - Dise&ntilde;adora Gr&aacute;fica</div>
+            </div>
+            <div class="testimonial">
+                <p>Llevamos 5 a&ntilde;os trabajando juntos. Nuestra carga fiscal se redujo un 30% de forma completamente legal. Lo recomiendo ampliamente.</p>
+                <div class="author">Roberto S&aacute;nchez</div>
+                <div class="role">Director - Distribuidora del Norte S.A.</div>
+            </div>
+            <div class="testimonial">
+                <p>Me ayud&oacute; a constituir mi empresa y desde entonces lleva toda mi contabilidad. Profesional, puntual y siempre actualizado con las reformas fiscales.</p>
+                <div class="author">Ana Garc&iacute;a</div>
+                <div class="role">Fundadora - Caf&eacute; Org&aacute;nico MX</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+        <div class="section-title">
+            <h2>Contacto</h2>
+            <p>Agenda tu primera consulta gratuita</p>
+            <div class="underline"></div>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Hablemos de tus impuestos</h3>
+                <p style="color:#666; margin-bottom:1.5rem;">Estoy listo para ayudarte. Agenda una cita o env&iacute;ame un mensaje con tu situaci&oacute;n fiscal.</p>
+                <div class="contact-item">
+                    <div class="icon">&#128205;</div>
+                    <div class="details">
+                        <strong>Oficina</strong>
+                        <span>Av. Reforma 222, Piso 8<br>Col. Ju&aacute;rez, CDMX</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon">&#128222;</div>
+                    <div class="details">
+                        <strong>Tel&eacute;fono</strong>
+                        <span>(55) 1234-5678</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon">&#128231;</div>
+                    <div class="details">
+                        <strong>Correo</strong>
+                        <span>contacto@contafiscal.mx</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon">&#128336;</div>
+                    <div class="details">
+                        <strong>Horario</strong>
+                        <span>Lun - Vie: 9:00 - 18:00</span>
+                    </div>
+                </div>
+            </div>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Mensaje enviado. Nos pondremos en contacto pronto.');">
+                <input type="text" placeholder="Tu nombre completo" required>
+                <input type="email" placeholder="Tu correo electr&oacute;nico" required>
+                <input type="tel" placeholder="Tu tel&eacute;fono">
+                <textarea placeholder="Describe brevemente tu situaci&oacute;n fiscal o consulta..."></textarea>
+                <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <strong>ContaFiscal</strong> | C.P. Carlos Mendoza Rios</p>
+        <p style="margin-top:0.5rem; font-size:0.85rem;">Todos los derechos reservados</p>
+    </footer>
+
+</body>
+</html>
